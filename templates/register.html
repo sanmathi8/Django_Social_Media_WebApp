@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up • Socialize{% endblock %}
+
+{% block unauth_content %}
+<div class="auth-page">
+    <div class="auth-box">
+        <div class="auth-card">
+            <div class="auth-logo">Socialize</div>
+            <p class="auth-subtitle">Sign up to see photos from your friends.</p>
+            <form method="POST" action="{% url 'register' %}" class="auth-form">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    <input type="{% if 'password' in field.name %}password{% else %}{% if field.name == 'email' %}email{% else %}text{% endif %}{% endif %}"
+                           name="{{ field.html_name }}"
+                           class="form-input"
+                           placeholder="{{ field.label }}"
+                           {% if field.value %}value="{{ field.value }}"{% endif %}
+                           required>
+                    {% if field.help_text %}
+                    <div class="form-help">{{ field.help_text|safe }}</div>
+                    {% endif %}
+                    {% for error in field.errors %}
+                    <div class="form-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="auth-submit">Sign up</button>
+            </form>
+        </div>
+        <div class="auth-switch">
+            Have an account? <a href="{% url 'login' %}">Log in</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Search • Socialize{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+    <!-- Search Bar -->
+    <form method="GET" action="{% url 'search' %}" class="search-bar-wrap">
+        <div class="search-input-group">
+            <i class="bi bi-search"></i>
+            <input type="text" name="q" value="{{ query }}" placeholder="Search" autocomplete="off">
+        </div>
+    </form>
+
+    {% if query %}
+        {% if not results %}
+        <div class="empty-state">
+            <div class="empty-icon"><i class="bi bi-person-x"></i></div>
+            <h3>No results found</h3>
+            <p>No users matching "{{ query }}"</p>
+        </div>
+        {% else %}
+        <div>
+            {% for user_item in results %}
+            <a href="{% url 'profile' user_item.username %}" class="search-result-item" style="text-decoration:none;color:inherit">
+                <div class="search-user-info">
+                    <div class="avatar-ring{% if not user_item.profile.profile_pic %} no-story{% endif %}">
+                        {% if user_item.profile.profile_pic %}
+                        <img src="{{ user_item.profile.profile_pic.url }}" class="avatar avatar-md" alt="">
+                        {% else %}
+                        <div class="avatar-fallback md">{{ user_item.username|slice:":1"|upper }}</div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <span class="s-name">{{ user_item.username }}</span>
+                        {% if user_item.profile.bio %}
+                        <span class="s-bio">{{ user_item.profile.bio }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-icon"><i class="bi bi-search"></i></div>
+        <h3>Search</h3>
+        <p>Search for users by their username.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

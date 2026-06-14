@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}{{ profile_user.username }} • Socialize{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <!-- Profile Header -->
+    <div class="profile-top">
+        <div class="profile-avatar-col">
+            <div class="avatar-ring{% if not profile.profile_pic %} no-story{% endif %}">
+                {% if profile.profile_pic %}
+                <img src="{{ profile.profile_pic.url }}" alt="{{ profile_user.username }}" class="avatar avatar-xl">
+                {% else %}
+                <div class="avatar-fallback xl">{{ profile_user.username|slice:":1"|upper }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="profile-info-col">
+            <div class="profile-name-row">
+                <h1>{{ profile_user.username }}</h1>
+                <div class="profile-action-btns">
+                    {% if profile_user == request.user %}
+                    <a href="{% url 'edit_profile' %}" class="btn-secondary-custom">Edit profile</a>
+                    {% else %}
+                    <a href="{% url 'follow_user' profile_user.username %}" class="btn-follow {% if is_following %}following{% else %}not-following{% endif %}">
+                        {% if is_following %}Following{% else %}Follow{% endif %}
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="profile-stats-row">
+                <div class="stat"><strong>{{ posts.count }}</strong> post{{ posts.count|pluralize }}</div>
+                <div class="stat"><strong>{{ profile.followers_count }}</strong> follower{{ profile.followers_count|pluralize }}</div>
+                <div class="stat"><strong>{{ profile.following_count }}</strong> following</div>
+            </div>
+
+            {% if profile.bio %}
+            <div class="profile-bio">{{ profile.bio }}</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="profile-tab-bar">
+        <div class="profile-tab active">
+            <i class="bi bi-grid-3x3"></i> Posts
+        </div>
+    </div>
+
+    <!-- Posts Grid -->
+    {% if not posts %}
+    <div class="profile-empty">
+        <i class="bi bi-camera"></i>
+        <h3>{% if profile_user == request.user %}Share Photos{% else %}No Posts Yet{% endif %}</h3>
+        <p>{% if profile_user == request.user %}When you share photos, they will appear on your profile.{% else %}When {{ profile_user.username }} shares photos, they will appear here.{% endif %}</p>
+        {% if profile_user == request.user %}
+        <a href="{% url 'create_post' %}" class="btn-primary-custom" style="margin-top:12px">Share your first photo</a>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="profile-grid">
+        {% for post in posts %}
+        <div class="grid-item">
+            <img src="{{ post.image.url }}" alt="">
+            <div class="grid-overlay">
+                <div class="ov-stat"><i class="bi bi-heart-fill"></i> {{ post.likes.count }}</div>
+                <div class="ov-stat"><i class="bi bi-chat-fill"></i> {{ post.comments.count }}</div>
+            </div>
+            {% if profile_user == request.user %}
+            <a href="{% url 'delete_post' post.id %}" class="grid-delete-btn" onclick="return confirm('Delete this post?')" title="Delete">
+                <i class="bi bi-trash"></i>
+            </a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

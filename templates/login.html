@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Login • Socialize{% endblock %}
+
+{% block unauth_content %}
+<div class="auth-page">
+    <div class="auth-box">
+        <div class="auth-card">
+            <div class="auth-logo">Socialize</div>
+            <form method="POST" action="{% url 'login' %}" class="auth-form">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="form-group">
+                    <input type="{% if 'password' in field.name %}password{% else %}text{% endif %}"
+                           name="{{ field.html_name }}"
+                           class="form-input"
+                           placeholder="{{ field.label }}"
+                           required>
+                    {% for error in field.errors %}
+                    <div class="form-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                <button type="submit" class="auth-submit">Log In</button>
+            </form>
+        </div>
+        <div class="auth-switch">
+            Don't have an account? <a href="{% url 'register' %}">Sign up</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

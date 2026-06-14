@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Socialize{% endblock %}
+
+{% block content %}
+<div class="feed-wrapper">
+    {% if not posts %}
+    <div class="post-card">
+        <div class="empty-state">
+            <div class="empty-icon"><i class="bi bi-camera"></i></div>
+            <h3>Share Photos</h3>
+            <p>When you share photos, they will appear on your feed.</p>
+            <a href="{% url 'create_post' %}" class="btn-primary-custom">Share your first photo</a>
+        </div>
+    </div>
+    {% endif %}
+
+    {% for post in posts %}
+    <article class="post-card">
+        <!-- Header -->
+        <div class="post-header">
+            <div class="post-header-left">
+                <a href="{% url 'profile' post.user.username %}">
+                    <div class="avatar-ring">
+                        {% if post.user.profile.profile_pic %}
+                        <img src="{{ post.user.profile.profile_pic.url }}" alt="" class="avatar avatar-sm">
+                        {% else %}
+                        <div class="avatar-fallback sm">{{ post.user.username|slice:":1"|upper }}</div>
+                        {% endif %}
+                    </div>
+                </a>
+                <a href="{% url 'profile' post.user.username %}" class="username-link">{{ post.user.username }}</a>
+                <span style="color:var(--text-tertiary);font-size:12px">• {{ post.created_at|timesince }} ago</span>
+            </div>
+            {% if post.user == request.user %}
+            <div class="dropdown">
+                <button class="post-menu-btn" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></button>
+                <ul class="dropdown-menu dropdown-menu-end shadow-sm border">
+                    <li><a class="dropdown-item text-danger" href="{% url 'delete_post' post.id %}" onclick="return confirm('Delete this post?')"><i class="bi bi-trash me-2"></i>Delete</a></li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Image -->
+        <div class="post-img-wrap">
+            <img src="{{ post.image.url }}" alt="Post by {{ post.user.username }}">
+        </div>
+
+        <!-- Actions -->
+        <div class="post-actions-row">
+            <button class="post-action-btn like-btn" data-post-id="{{ post.id }}">
+                {% if post.id in user_liked_posts %}
+                <i class="bi bi-heart-fill"></i>
+                {% else %}
+                <i class="bi bi-heart"></i>
+                {% endif %}
+            </button>
+            <button class="post-action-btn" onclick="document.getElementById('ci-{{ post.id }}').focus()">
+                <i class="bi bi-chat"></i>
+            </button>
+        </div>
+
+        <!-- Info -->
+        <div class="post-info">
+            <div class="post-likes" id="like-count-{{ post.id }}">{{ post.likes.count }} like{{ post.likes.count|pluralize }}</div>
+
+            {% if post.caption %}
+            <div class="post-caption">
+                <a href="{% url 'profile' post.user.username %}" class="cap-user">{{ post.user.username }}</a>{{ post.caption }}
+            </div>
+            {% endif %}
+
+            {% if post.comments.all %}
+            <div class="post-comments">
+                {% for comment in post.comments.all %}
+                <div class="comment-row">
+                    <a href="{% url 'profile' comment.user.username %}" class="c-user">{{ comment.user.username }}</a>{{ comment.content }}
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div class="post-timestamp">{{ post.created_at|timesince }} ago</div>
+        </div>
+
+        <!-- Comment Input -->
+        <form action="{% url 'comment_post' post.id %}" method="POST" class="comment-bar">
+            {% csrf_token %}
+            <input type="text" name="content" placeholder="Add a comment..." id="ci-{{ post.id }}" required autocomplete="off">
+            <button type="submit">Post</button>
+        </form>
+    </article>
+    {% endfor %}
+</div>
+{% endblock %}

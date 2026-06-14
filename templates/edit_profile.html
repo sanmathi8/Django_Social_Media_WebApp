@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile • Socialize{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+    <div class="form-page-card">
+        <div class="form-page-header">Edit profile</div>
+        <div class="form-page-body">
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <!-- Current avatar preview -->
+                <div class="d-flex align-items-center gap-3 mb-4 p-3 rounded-3" style="background:var(--hover)">
+                    <div class="avatar-ring{% if not request.user.profile.profile_pic %} no-story{% endif %}">
+                        {% if request.user.profile.profile_pic %}
+                        <img src="{{ request.user.profile.profile_pic.url }}" class="avatar avatar-md" alt="">
+                        {% else %}
+                        <div class="avatar-fallback md">{{ request.user.username|slice:":1"|upper }}</div>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <div style="font-weight:600">{{ request.user.username }}</div>
+                    </div>
+                </div>
+
+                <div class="form-section-title">Account</div>
+                {% for field in u_form %}
+                <div class="form-group-custom">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}
+                    <div style="color:var(--danger);font-size:12px;margin-top:4px">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <div class="form-section-title">Profile</div>
+                {% for field in p_form %}
+                <div class="form-group-custom">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}
+                    <div style="color:var(--danger);font-size:12px;margin-top:4px">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <div class="form-actions">
+                    <a href="{% url 'profile' request.user.username %}" class="btn-secondary-custom" style="flex:1;text-align:center">Cancel</a>
+                    <button type="submit" class="btn-primary-custom" style="flex:1">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
