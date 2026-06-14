@@ -20,6 +20,12 @@
     --like-red: #ed4956;
     --success: #22c55e;
     --danger: #ef4444;
+    /* Dark mode overrides */
+    --bg-dark: #111827;
+    --card-dark: #1f2937;
+    --text-dark: #f9fafb;
+    --border-dark: #374151;
+    --hover-dark: #1e293b;
 }
 
 * { box-sizing: border-box; }
@@ -159,18 +165,50 @@ a:hover { color: var(--primary-hover); }
 }
 
 /* --- Mobile Bottom Nav --- */
-.bottom-nav {
-    display: none;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(255,255,255,0.97);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-top: 1px solid var(--border);
-    z-index: 100;
-    padding: 6px 0 env(safe-area-inset-bottom, 6px);
+@media (max-width: 768px) {
+    .sidebar {
+        display: none;
+    }
+    .main-area {
+        margin-left: 0;
+    }
+    .bottom-nav {
+        display: flex;
+    }
 }
 
+/* Dark mode styling – applied when <body class="dark-mode"> */
+body.dark-mode {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+}
+body.dark-mode .app-wrapper {
+    background: var(--bg-dark);
+}
+body.dark-mode .sidebar {
+    background: var(--card-dark);
+    border-right-color: var(--border-dark);
+}
+body.dark-mode .main-area {
+    background: var(--bg-dark);
+}
+body.dark-mode .post-card,
+body.dark-mode .auth-card {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+}
+body.dark-mode .post-action-btn,
+body.dark-mode .nav-item a,
+body.dark-mode a {
+    color: var(--text-dark);
+}
+body.dark-mode .nav-item a.active {
+    font-weight: 600;
+}
+body.dark-mode .bottom-nav {
+    background: var(--bg-dark);
+    border-top-color: var(--border-dark);
+}
 .bottom-nav ul {
     display: flex;
     justify-content: space-around;

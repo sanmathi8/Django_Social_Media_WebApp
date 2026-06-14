@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,9 +28,14 @@
         <!-- Desktop Sidebar -->
         <aside class="sidebar">
             <a href="{% url 'home' %}" class="sidebar-brand">
-                <div class="brand-icon"><i class="bi bi-hash"></i></div>
-                <span class="brand-text">Socialize</span>
-            </a>
+            <div class="brand-icon">
+                <i class="bi bi-hash"></i>
+            </div>
+            <span class="brand-text">Socialize</span>
+        </a>
+        <button id="theme-toggle" class="btn btn-sm" title="Toggle dark mode" style="margin-left:auto; background:none; border:none; color:var(--text);">
+            <i class="bi bi-moon"></i>
+        </button>    </a>
             <ul class="sidebar-nav">
                 <li class="nav-item">
                     <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
