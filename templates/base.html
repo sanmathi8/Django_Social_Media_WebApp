@@ -11,7 +11,7 @@
 </head>
 <body>
     {% if messages %}
-    <div class="toast-container">
+    <div class="toast-container" role="status" aria-live="polite">
         {% for message in messages %}
         <div class="toast-msg alert-dismissible">
             {% if message.tags == 'success' %}<i class="bi bi-check-circle-fill" style="color:var(--success)"></i>
@@ -28,14 +28,10 @@
         <!-- Desktop Sidebar -->
         <aside class="sidebar">
             <a href="{% url 'home' %}" class="sidebar-brand">
-            <div class="brand-icon">
-                <i class="bi bi-hash"></i>
-            </div>
-            <span class="brand-text">Socialize</span>
-        </a>
-        <button id="theme-toggle" class="btn btn-sm" title="Toggle dark mode" style="margin-left:auto; background:none; border:none; color:var(--text);">
-            <i class="bi bi-moon"></i>
-        </button>    </a>
+                <div class="brand-icon"><i class="bi bi-hash"></i></div>
+                <span class="brand-text">Socialize</span>
+            </a>
+
             <ul class="sidebar-nav">
                 <li class="nav-item">
                     <a href="{% url 'home' %}" class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">
@@ -61,7 +57,13 @@
                         <span>Profile</span>
                     </a>
                 </li>
-                <li class="nav-item mt-auto">
+                <li class="nav-item sidebar-bottom">
+                    <button id="theme-toggle" class="sidebar-theme-btn" title="Toggle dark mode">
+                        <i class="bi bi-moon"></i>
+                        <span>Theme</span>
+                    </button>
+                </li>
+                <li class="nav-item">
                     <a href="{% url 'logout' %}" class="text-danger">
                         <i class="bi bi-box-arrow-left"></i>
                         <span>Log out</span>

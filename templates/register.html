@@ -9,6 +9,13 @@
             <p class="auth-subtitle">Sign up to see photos from your friends.</p>
             <form method="POST" action="{% url 'register' %}" class="auth-form">
                 {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="form-error" style="margin-bottom:12px;">
+                    {% for error in form.non_field_errors %}
+                    {{ error }}<br>
+                    {% endfor %}
+                </div>
+                {% endif %}
                 {% for field in form %}
                 <div class="form-group">
                     <input type="{% if 'password' in field.name %}password{% else %}{% if field.name == 'email' %}email{% else %}text{% endif %}{% endif %}"

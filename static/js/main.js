@@ -66,20 +66,30 @@ document.addEventListener('DOMContentLoaded', () => {
         return cookieValue;
     }
 
-    // 2. Auto-dismiss Alert Messages
-    const alerts = document.querySelectorAll('.alert-dismissible');
-    alerts.forEach(alert => {
+    // Theme toggle persistence
+    const themeToggle = document.getElementById('theme-toggle');
+    const body = document.body;
+    const savedTheme = localStorage.getItem('socialize-theme');
+
+    if (savedTheme === 'dark') {
+        body.classList.add('dark-mode');
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            const isDark = body.classList.toggle('dark-mode');
+            localStorage.setItem('socialize-theme', isDark ? 'dark' : 'light');
+        });
+    }
+
+    // 2. Auto-dismiss toast messages
+    const toastMessages = document.querySelectorAll('.toast-msg');
+    toastMessages.forEach(message => {
         setTimeout(() => {
-            // Check if bootstrap is defined before calling
-            if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            } else {
-                // Fallback fade out
-                alert.style.transition = 'opacity 0.5s ease';
-                alert.style.opacity = '0';
-                setTimeout(() => alert.remove(), 500);
-            }
-        }, 4000);
+            message.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+            message.style.opacity = '0';
+            message.style.transform = 'translateX(20px)';
+            setTimeout(() => message.remove(), 400);
+        }, 4200);
     });
 });

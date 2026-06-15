@@ -55,6 +55,10 @@ a:hover { color: var(--primary-hover); }
     min-height: 100vh;
 }
 
+.sidebar-bottom {
+    margin-top: auto;
+}
+
 /* --- Desktop Sidebar --- */
 .sidebar {
     width: 244px;
@@ -150,12 +154,13 @@ a:hover { color: var(--primary-hover); }
     flex: 1;
     margin-left: 244px;
     min-height: 100vh;
+    padding: 24px 16px 92px;
 }
 
 .feed-wrapper {
-    max-width: 470px;
+    max-width: 540px;
     margin: 0 auto;
-    padding: 30px 0 60px;
+    padding: 24px 0 80px;
 }
 
 .page-wrapper {
@@ -209,6 +214,17 @@ body.dark-mode .bottom-nav {
     background: var(--bg-dark);
     border-top-color: var(--border-dark);
 }
+.bottom-nav {
+    display: none;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    z-index: 101;
+}
+
 .bottom-nav ul {
     display: flex;
     justify-content: space-around;
@@ -556,7 +572,7 @@ body.dark-mode .bottom-nav {
 /* Profile Posts Grid */
 .profile-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 4px;
     margin-top: 4px;
 }
@@ -1051,19 +1067,19 @@ body.dark-mode .bottom-nav {
 @media (max-width: 767px) {
     .sidebar { display: none; }
     .bottom-nav { display: block; }
-    .main-area { margin-left: 0; }
+    .main-area { margin-left: 0; padding-bottom: 108px; }
 
-    .feed-wrapper { padding: 0 0 70px; }
+    .feed-wrapper { padding: 0 12px 90px; }
     .post-card { border-radius: 0; border-left: none; border-right: none; margin-bottom: 12px; }
-    .page-wrapper { padding: 16px 16px 80px; }
+    .page-wrapper { padding: 16px 16px 100px; }
 
-    .profile-container { padding: 16px 16px 80px; }
+    .profile-container { padding: 16px 16px 100px; }
     .profile-top { flex-direction: column; gap: 16px; align-items: center; text-align: center; }
     .profile-avatar-col { width: auto; }
     .avatar-xl { width: 86px; height: 86px; }
     .avatar-fallback.xl { width: 86px; height: 86px; font-size: 32px; }
     .profile-name-row { justify-content: center; }
-    .profile-stats-row { justify-content: center; gap: 28px; }
+    .profile-stats-row { justify-content: center; gap: 28px; flex-wrap: wrap; }
     .profile-bio { max-width: 100%; text-align: center; }
     .profile-grid { gap: 2px; }
 }

@@ -8,12 +8,20 @@
             <div class="auth-logo">Socialize</div>
             <form method="POST" action="{% url 'login' %}" class="auth-form">
                 {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="form-error" style="margin-bottom:12px;">
+                    {% for error in form.non_field_errors %}
+                    {{ error }}<br>
+                    {% endfor %}
+                </div>
+                {% endif %}
                 {% for field in form %}
                 <div class="form-group">
                     <input type="{% if 'password' in field.name %}password{% else %}text{% endif %}"
                            name="{{ field.html_name }}"
                            class="form-input"
                            placeholder="{{ field.label }}"
+                           value="{{ field.value|default_if_none:'' }}"
                            required>
                     {% for error in field.errors %}
                     <div class="form-error">{{ error }}</div>
