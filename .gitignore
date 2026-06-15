@@ -1,0 +1,36 @@
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual env
+venv/
+ENV/
+env/
+.venv/
+
+# SQLite database
+db.sqlite3
+
+# Static files
+staticfiles/
+
+# Media uploads
+media/
+
+# IDE files
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# OS files
+Thumbs.db
+desktop.ini
