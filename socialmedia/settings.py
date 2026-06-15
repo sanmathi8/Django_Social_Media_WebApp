@@ -13,12 +13,23 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-@d*1m-9(6j=l$y+p^j3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
-allowed_hosts = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost')
+allowed_hosts = os.getenv('DJANGO_ALLOWED_HOSTS', '')
+render_url = os.getenv('RENDER_EXTERNAL_URL') or os.getenv('RENDER_INTERNAL_HOSTNAME')
 ALLOWED_HOSTS = [host.strip() for host in allowed_hosts.split(',') if host.strip()]
-if not DEBUG and not ALLOWED_HOSTS:
-    ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = [f'https://{host}' for host in ALLOWED_HOSTS if host and host != '*']
+if render_url:
+    render_host = render_url.replace('https://', '').replace('http://', '').strip().rstrip('/')
+    if render_host and render_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(render_host)
+
+if not ALLOWED_HOSTS:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+
+CSRF_TRUSTED_ORIGINS = [
+    f'https://{host}' for host in ALLOWED_HOSTS if host and host != '*'
+]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
